@@ -11,6 +11,9 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primaryButton: "var(--primary-button)",
+        buttonHoverColor: "var(--hover-text-color)",
+        secondaryTextColor: "var(--secondary-text-color)",
       },
     },
   },
