@@ -23,8 +23,11 @@ export const useLoginUser = () => {
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
       setError(result.error.errors[0]?.message || "Validation failed.");
-      return false;
+      return { success: false, error: result.error.errors[0]?.message };
     }
+
+    setIsLoading(true);
+    setError(null);
 
     try {
       const response = await fetch(url, {
@@ -35,31 +38,22 @@ export const useLoginUser = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        const errorMessage = errorData.error.message || "Invalid credentials";
 
-        if (response.status === 404) {
-          setError(errorData.error.message || "Email not Found");
-        }
+        setError(errorMessage);
+        return { success: false, error: errorMessage };
       }
 
-      // Parse the JSON response
       const data = await response.json();
-      console.log("Response from server:", data);
-
-      // Save the user ID (or other relevant data) to localStorage
-      if (data.id) {
-        localStorage.setItem("userId", data.id);
-      } else {
-        console.error("User ID not found in response");
-      }
+      localStorage.setItem("userId", data.id);
 
       setIsLoading(false);
-      return true;
-
+      return { success: true, error: null };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       setIsLoading(false);
-      setError(error.message || "Error creating user.");
-      return false;
+      setError(error.message || "Error logging in.");
+      return { success: false, error: error.message };
     }
   };
   return { loginUser, isLoading, error };
