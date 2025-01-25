@@ -12,7 +12,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loginUser, isLoading } = useLoginUser();
+  const { loginUser } = useLoginUser();
 
   const handleSubmitLogin = async () => {
     try {
@@ -79,9 +79,7 @@ const Login = () => {
             onClick={handleSubmitLogin}
             className="bg-primaryButton py-3 rounded-xl hover:bg-buttonHoverColor"
           >
-            <span className="text-white font-bold text-base">
-              {isLoading ? "Login..." : "Login"}
-            </span>
+            <span className="text-white font-bold text-base">Login</span>
           </button>
         </div>
         <div className="flex items-center justify-center">
