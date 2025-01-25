@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const router = useRouter();
   return (
-    <div className="flex flex-col justify-center min-h-screen gap-4 bg-background px-6">
+    <div className="flex flex-col justify-center h-screen gap-4 bg-background px-6 overflow-y-hidden">
       <div className="flex flex-col items-center pb-7">
         <Image src="/Logo.png" alt="Logo" width={200} height={30} />
       </div>
