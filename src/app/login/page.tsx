@@ -21,7 +21,7 @@ const Login = () => {
       if (success) {
         toast.success("Logged in successfully!", {
           position: "top-right",
-          duration: 2000,
+          duration: 1000,
         });
         setTimeout(() => {
           router.push("/home");
