@@ -1,7 +1,8 @@
 import { Header } from "@/components/header";
-import BandSection from "./components/band-section";
+import BandSection from "./components/band-section/band-section";
 import RepertoireBanner from "./components/new-repertoire-banner";
 import Repertoires from "./components/repertoires";
+import Musics from "./components/music-section/musics";
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       <BandSection />
       <RepertoireBanner />
       <Repertoires />
+      <Musics />
     </div>
   );
 };
