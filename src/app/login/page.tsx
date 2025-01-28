@@ -29,18 +29,18 @@ const Login = () => {
       } else {
         toast.error(error || "Invalid email or password", {
           position: "top-right",
-          duration: 2000,
+          duration: 1000,
         });
       }
     } catch (error) {
       console.log(error);
       toast.error("Error logging in. Please try again.", {
         position: "top-right",
-        duration: 2000,
+        duration: 1000,
       });
     }
   };
-
+  //refactor
   return (
     <>
       <Toaster />
@@ -57,7 +57,7 @@ const Login = () => {
             <input
               type="text"
               placeholder="Enter Your Email"
-              className="px-5 py-2 rounded-lg outline-none"
+              className="px-5 py-2 rounded-lg outline-none text-black"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -67,7 +67,7 @@ const Login = () => {
             <input
               type="password"
               placeholder="Enter Your Password"
-              className="px-5 py-2 rounded-lg outline-none"
+              className="px-5 py-2 rounded-lg outline-none text-black"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
