@@ -2,6 +2,7 @@ import { useState } from "react";
 
 interface Band {
   name: string;
+  imageUrl?: string;
 }
 
 interface UseCreateBandsResponse {
@@ -16,7 +17,7 @@ export const useCreateBands = (): UseCreateBandsResponse => {
   const [isLoading] = useState(false);
   const [error] = useState<string | null>(null);
 
-  const createBand = async ({ name }: Band) => {
+  const createBand = async ({ name, imageUrl }: Band) => {
     const userId = localStorage.getItem("userId");
 
     if (!userId) {
@@ -32,6 +33,7 @@ export const useCreateBands = (): UseCreateBandsResponse => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name,
+          imageUrl: imageUrl,
           leaderId: userId, // Ensure this is a simple string and not an object
         }),
       });

@@ -25,12 +25,14 @@ const BandSection = () => {
           ? bands.map((band) => (
               <div key={band.id} className="flex flex-col gap-2">
                 <div className="flex justify-center items-center w-16 h-16 bg-gray-100 rounded-full overflow-hidden">
-                  <Image
-                    src="/assets/profile.png"
-                    alt={band.name}
-                    width={70}
-                    height={70}
-                  />
+                  {band.imageUrl && (
+                    <Image
+                      src={band.imageUrl}
+                      alt={band.name}
+                      width={70}
+                      height={70}
+                    />
+                  )}
                 </div>
                 <div className="w-20">
                   <p className="text-lg font-bold text-center truncate text-primary-text-color">

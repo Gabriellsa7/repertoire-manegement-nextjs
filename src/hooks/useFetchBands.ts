@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 interface Band {
   id: string;
   name: string;
-  description: string;
+  imageUrl: string;
+  description?: string;
 }
 
 export const useFetchBands = (userId: string | null) => {

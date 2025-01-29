@@ -11,11 +11,12 @@ interface ModalSectionProps {
 export const ModalSection = ({ isOpen, onClose }: ModalSectionProps) => {
   const { createBand, error, isLoading } = useCreateBands();
   const [name, setName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleSubmitCreateBand = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { success } = await createBand({ name });
+      const { success } = await createBand({ name, imageUrl });
 
       if (success) {
         toast.success("Band created successfully!", {
@@ -23,6 +24,7 @@ export const ModalSection = ({ isOpen, onClose }: ModalSectionProps) => {
           duration: 1000,
         });
         setName(""); // Clear input field after successful creation
+        setImageUrl("");
         onClose(); // Close modal on success
       }
     } catch (error) {
@@ -57,6 +59,16 @@ export const ModalSection = ({ isOpen, onClose }: ModalSectionProps) => {
               className="w-full p-3 outline-none rounded-lg mb-4 text-black"
               value={name}
               onChange={(e) => setName(e.target.value)}
+            />
+            <label className="block mb-2 font-bold text-white">
+              Band Image Url
+            </label>
+            <input
+              type="text"
+              placeholder="Enter Band Image"
+              className="w-full p-3 outline-none rounded-lg mb-4 text-black"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
             />
             {error && <p style={{ color: "red" }}>Error: {error}</p>}
             <button
