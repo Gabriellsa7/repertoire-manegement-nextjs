@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
 import BandSection from "./components/band-section/band-section";
 import RepertoireBanner from "./components/new-repertoire-banner";
-import Repertoires from "./components/repertoires";
+import Repertoires from "./components/repertoires-section/repertoires";
 import Musics from "./components/music-section/musics";
 
 const Home = () => {
