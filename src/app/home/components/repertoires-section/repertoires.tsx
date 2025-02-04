@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ModalSection } from "./components/modal-section";
 
 interface Repertoire {
   id: string;
@@ -12,6 +13,7 @@ const Repertoires = () => {
   const [repertoires, setRepertoires] = useState<Repertoire[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null); // Error handling
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchRepertoires = async () => {
@@ -96,7 +98,7 @@ const Repertoires = () => {
         )}
 
         {/* Add button */}
-        <button className="pb-9">
+        <button className="pb-9" onClick={() => setIsModalOpen(true)}>
           <Image
             src="/assets/plus2.png"
             alt="plus icon"
@@ -105,6 +107,10 @@ const Repertoires = () => {
           />
         </button>
       </div>
+      <ModalSection
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
