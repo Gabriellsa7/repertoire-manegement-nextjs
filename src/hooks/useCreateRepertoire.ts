@@ -19,13 +19,14 @@ export const useCreateRepertoire = (): UseCreateRepertoireResponse => {
 
   const createRepertoire = async ({ name, imageUrl }: Repertoire) => {
     const userId = localStorage.getItem("userId");
+    const url = "http://localhost:8080/repertoire";
 
     if (!userId) {
       throw new Error("User ID is not found");
     }
 
     try {
-      const response = await fetch("http://localhost:8080/repertoire", {
+      const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
