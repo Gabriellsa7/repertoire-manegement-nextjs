@@ -13,8 +13,7 @@ export const ModalSection = ({ isOpen, onClose }: ModalSectionProps) => {
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const handleSubmitCreateBand = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmitCreateBand = async () => {
     try {
       const { success } = await createBand({ name, imageUrl });
 
