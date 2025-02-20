@@ -15,6 +15,7 @@ const BandSection = () => {
 
   const handleSubmitBandInfo = () => {
     router.push(`/band-info`);
+    //try pass the id to band-info
   };
 
   return (
