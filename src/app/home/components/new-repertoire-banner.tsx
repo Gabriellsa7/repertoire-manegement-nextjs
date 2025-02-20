@@ -1,84 +1,75 @@
 "use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Repertoire {
   id: string;
   name: string;
   description: string;
+  image_url: string | null;
 }
 
 const RepertoireBanner = () => {
-  const [repertoires, setRepertoires] = useState<Repertoire[]>([]);
-  const [
-    {
-      /*loading*/
-    },
-    setLoading,
-  ] = useState<boolean>(true);
+  const [latestRepertoire, setLatestRepertoire] = useState<Repertoire | null>(
+    null
+  );
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchFirstRepertoire = async () => {
+    const fetchLatestRepertoire = async () => {
       try {
-        setLoading(true);
-        setError(null);
-
-        //pick the userId in local storage
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-          throw new Error("User not logged in.");
-        }
-
-        // Fetch bands where the user is the leader
-        const bandsResponse = await fetch(
-          `http://localhost:8080/bands/leader/${userId}`
+        const response = await fetch(
+          "http://localhost:8080/repertoire/latest",
+          {
+            cache: "no-store", // Impede que o navegador use cache antigo
+          }
         );
-        if (!bandsResponse.ok) {
-          throw new Error("Error fetching bands.");
+        if (!response.ok) {
+          throw new Error("No repertoire found");
         }
-        const bandsData = await bandsResponse.json();
-
-        // Assuming we list the repertories for the first band found
-        if (bandsData.length === 0) {
-          throw new Error("No bands found for this user.");
-        }
-        const bandId = bandsData[0].id; // Pick the first band
-
-        // Fetch the repertoires for the selected band
-        const repertoireResponse = await fetch(
-          `http://localhost:8080/repertoire/band/${bandId}`
-        );
-        if (!repertoireResponse.ok) {
-          throw new Error("Error fetching repertoires.");
-        }
-        const repertoireData = await repertoireResponse.json();
-
-        setRepertoires(repertoireData);
+        const data = await response.json();
+        setLatestRepertoire(data);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
-        setError(err.message || "Error fetching data.");
+        setError(`No repertoire found.${err}`);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFirstRepertoire();
+    fetchLatestRepertoire();
   }, []);
+
   return (
     <div className="flex flex-col gap-5 px-4 py-5">
       <div>
         <span className="font-bold">New Repertoire</span>
       </div>
-      <div className="h-36 bg-white rounded-xl">
-        {repertoires.length > 0 ? (
-          repertoires.map((repertoire) => (
-            <div className="p-3" key={repertoire.id}>
-              <p className="text-black">{repertoire.name}</p>
-              <p className="text-black">{repertoire.description}</p>
-            </div>
-          ))
+      <div className="h-36 bg-white rounded-xl p-3">
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p>{error}</p>
+        ) : latestRepertoire ? (
+          <>
+            {latestRepertoire.image_url ? (
+              <Image
+                src={latestRepertoire.image_url}
+                alt="logo"
+                width={100}
+                height={100}
+                priority
+              />
+            ) : (
+              <div className="flex flex-col items-center">
+                <p className="text-black">{latestRepertoire.name}</p>
+                <p className="text-black">{latestRepertoire.description}</p>
+              </div>
+            )}
+          </>
         ) : (
-          <div>{error}No Repertoires</div>
+          <p>No Repertoires</p>
         )}
       </div>
     </div>
