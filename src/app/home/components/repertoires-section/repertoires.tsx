@@ -3,8 +3,10 @@ import Image from "next/image";
 import { ModalSection } from "./components/modal-section";
 import { useFetchRepertoire } from "@/hooks/useFetchRepertoire";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Repertoires = () => {
+  const router = useRouter();
   const { repertoires, error, loading } = useFetchRepertoire();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -25,6 +27,7 @@ const Repertoires = () => {
             <div
               className="flex flex-col gap-2 min-w-[80px]"
               key={repertoire.id}
+              onClick={() => router.push(`/repertoire-info/${repertoire.id}`)}
             >
               <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3"></div>
               <div className="w-16">
