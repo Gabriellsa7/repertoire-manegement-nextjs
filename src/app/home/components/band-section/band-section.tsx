@@ -12,12 +12,6 @@ const BandSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
-
-  const handleSubmitBandInfo = () => {
-    router.push(`/band-info`);
-    //try pass the id to band-info
-  };
-
   return (
     <div className="relative flex flex-col px-4 py-5 gap-6">
       <div className="flex items-center justify-between">
@@ -31,17 +25,19 @@ const BandSection = () => {
       <div className="flex gap-3 items-center overflow-x-auto w-full whitespace-nowrap scrollbar-hide">
         {bands.length > 0
           ? bands.map((band) => (
-              <div key={band.id} className="flex flex-col gap-2 min-w-[80px]">
+              <div
+                key={band.id}
+                className="flex flex-col gap-2 min-w-[80px]"
+                onClick={() => router.push(`/band-info/${band.id}`)}
+              >
                 <div className="flex justify-center items-center w-16 h-16 bg-gray-100 rounded-full">
                   {band.imageUrl && (
-                    <button onClick={handleSubmitBandInfo}>
-                      <Image
-                        src={band.imageUrl}
-                        alt={band.name}
-                        width={70}
-                        height={70}
-                      />
-                    </button>
+                    <Image
+                      src={band.imageUrl}
+                      alt={band.name}
+                      width={70}
+                      height={70}
+                    />
                   )}
                 </div>
                 <div className="w-20">
