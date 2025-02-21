@@ -14,7 +14,7 @@ export const MusicList = () => {
   };
 
   return (
-    <div className="flex gap-5 flex-wrap">
+    <div className="flex gap-3 items-center overflow-x-auto w-full whitespace-nowrap scrollbar-hide">
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -22,7 +22,7 @@ export const MusicList = () => {
       ) : musics.length > 0 ? (
         musics.map((music) => (
           <div
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-2 min-w-[80px]"
             key={music.id}
             onClick={() => router.push(`/music/${music.id}`)}
           >
@@ -37,7 +37,10 @@ export const MusicList = () => {
       )}
 
       {/* Add button */}
-      <button className="pb-9" onClick={handleButton}>
+      <button
+        className="flex bg-transparent items-center min-w-[80px] pb-9"
+        onClick={handleButton}
+      >
         <Image src="/assets/plus2.png" alt="plus icon" width={32} height={32} />
       </button>
     </div>
