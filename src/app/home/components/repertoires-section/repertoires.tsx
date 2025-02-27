@@ -29,7 +29,18 @@ const Repertoires = () => {
               key={repertoire.id}
               onClick={() => router.push(`/repertoire-info/${repertoire.id}`)}
             >
-              <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3"></div>
+              <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
+                {repertoire.ImageUrl && repertoire.ImageUrl ? (
+                  <Image
+                    src={repertoire.ImageUrl}
+                    alt={repertoire.name}
+                    width={32}
+                    height={32}
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
               <div className="w-16">
                 <h3 className="text-lg font-bold truncate">
                   {repertoire.name}
@@ -38,7 +49,7 @@ const Repertoires = () => {
             </div>
           ))
         ) : (
-          <p>No repertoires found.</p>
+          ""
         )}
 
         {/* Add button */}
