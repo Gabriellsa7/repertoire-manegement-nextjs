@@ -4,6 +4,7 @@ interface Repertoire {
   id: string;
   name: string;
   description: string;
+  ImageUrl: string;
 }
 
 export const useFetchRepertoire = () => {
@@ -25,7 +26,7 @@ export const useFetchRepertoire = () => {
 
         // Fetch all bands where the user is a leader (or member)
         const bandsResponse = await fetch(
-          `http://localhost:8080/bands/leader/${userId}` // Use this endpoint to fetch all bands the user is a member of
+          `http://localhost:8080/bands/leader/${userId}`
           //try make the code bellow work, probably I need change the back
           //`http://localhost:8080/bands/member/${userId}`
         );
