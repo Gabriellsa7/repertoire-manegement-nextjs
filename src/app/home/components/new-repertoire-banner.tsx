@@ -6,7 +6,7 @@ interface Repertoire {
   id: string;
   name: string;
   description: string;
-  image_url: string | null;
+  imageUrl: string | null;
 }
 
 const RepertoireBanner = () => {
@@ -22,7 +22,7 @@ const RepertoireBanner = () => {
         const response = await fetch(
           "http://localhost:8080/repertoire/latest",
           {
-            cache: "no-store", // Impede que o navegador use cache antigo
+            cache: "no-store",
           }
         );
         if (!response.ok) {
@@ -53,9 +53,9 @@ const RepertoireBanner = () => {
           <p>{error}</p>
         ) : latestRepertoire ? (
           <>
-            {latestRepertoire.image_url ? (
+            {latestRepertoire.imageUrl ? (
               <Image
-                src={latestRepertoire.image_url}
+                src={latestRepertoire.imageUrl}
                 alt="logo"
                 width={100}
                 height={100}
