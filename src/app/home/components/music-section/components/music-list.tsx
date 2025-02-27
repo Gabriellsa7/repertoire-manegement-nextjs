@@ -33,7 +33,7 @@ export const MusicList = () => {
           </div>
         ))
       ) : (
-        <p>No musics found.</p>
+        ""
       )}
 
       {/* Add button */}
