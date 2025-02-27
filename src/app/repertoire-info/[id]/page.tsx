@@ -1,28 +1,18 @@
 "use client";
-import { useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
-
-interface Repertoire {
-  name: string;
-  description: string;
-  img_url: string;
-}
+import { AvailableMusicList } from "./components/available-music";
+import { RepertoireHeader } from "./components/repertoire-header";
+import { RepertoireMusicList } from "./components/repertoire-music-list";
 
 export const RepertoireInfo = () => {
-  const params = useParams();
-  const id = params.id as string;
-  const [repertoire, setRepertoire] = useState<Repertoire | null>(null);
-
-  useEffect(() => {
-    if (id) {
-      fetch(`http://localhost:8080/repertoire/${id}`)
-        .then((res) => res.json())
-        .then((data) => setRepertoire(data))
-        .catch((err) => console.error("Error fetching Repertoire:", err));
-    }
-  }, [id]);
-
-  return <div>{repertoire?.name}</div>;
+  return (
+    <div className="min-h-screen bg-gray-950 text-white m-4">
+      <RepertoireHeader />
+      <div className="max-w-md mx-auto flex flex-col gap-6">
+        <RepertoireMusicList />
+        <AvailableMusicList />
+      </div>
+    </div>
+  );
 };
 
 export default RepertoireInfo;
