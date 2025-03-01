@@ -53,7 +53,7 @@ export const Signup = () => {
             <input
               type="text"
               placeholder="Enter Your Name"
-              className="px-5 py-2 rounded-lg outline-none"
+              className="px-5 py-2 rounded-lg outline-none placeholder-gray-900"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -63,7 +63,7 @@ export const Signup = () => {
             <input
               type="text"
               placeholder="Enter Your Email"
-              className="px-5 py-2 rounded-lg outline-none"
+              className="px-5 py-2 rounded-lg outline-none placeholder-gray-900"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -73,7 +73,7 @@ export const Signup = () => {
             <input
               type="password"
               placeholder="Enter Your Password"
-              className="px-5 py-2 rounded-lg outline-none"
+              className="px-5 py-2 rounded-lg outline-none placeholder-gray-900"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
