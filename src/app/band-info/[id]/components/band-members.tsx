@@ -2,43 +2,69 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface Band {
   bandId: string;
 }
 
+interface User {
+  id: string;
+  name: string;
+  image_url: string;
+}
+
 export const BandMembers = ({ bandId }: Band) => {
   const router = useRouter();
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (bandId) {
+      console.log(bandId);
+      fetch(`http://localhost:8080/user/${bandId}/members`)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setUsers(data);
+          setLoading(false);
+        })
+        .catch((err) => console.error("Error fetching members:", err));
+    }
+  }, [bandId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
-      <div className="flex gap-3 items-center overflow-x-auto w-full whitespace-nowrap scrollbar-hide">
-        {/* {bands.length > 0
-              ? bands.map((band) => (
-                  <div
-                    key={band.id}
-                    className="flex flex-col gap-2 min-w-[80px]"
-                    onClick={() => router.push(`/band-info/${band.id}`)}
-                  >
-                    <div className="flex justify-center items-center w-16 h-16 bg-gray-100 rounded-full">
-                      {band.imageUrl && (
-                        <Image
-                          src={band.imageUrl}
-                          alt={band.name}
-                          width={70}
-                          height={70}
-                        />
-                      )}
-                    </div>
-                    <div className="w-20">
-                      <p className="text-lg font-bold text-center truncate text-primary-text-color">
-                        {band.name}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              : ""} */}
+      <div className="flex gap-2 items-center overflow-x-auto w-full whitespace-nowrap scrollbar-hide">
+        {users.length > 0
+          ? users.map((user) => (
+              <div
+                key={user.id}
+                className="flex flex-col items-center gap-2 min-w-[80px]"
+                onClick={() => router.push(`/user-info/${user.id}`)}
+              >
+                <div className="flex justify-center w-16 h-16 bg-gray-100 rounded-full">
+                  {user.image_url && (
+                    <Image
+                      src={user.image_url}
+                      alt={user.name}
+                      width={70}
+                      height={70}
+                    />
+                  )}
+                </div>
+                <div className="w-20">
+                  <p className="text-lg font-bold text-center truncate text-primary-text-color">
+                    {user.name}
+                  </p>
+                </div>
+              </div>
+            ))
+          : ""}
         <button
           className="flex bg-transparent items-center min-w-[80px] pb-9"
           onClick={() => router.push(`/add-user/${bandId}`)}
