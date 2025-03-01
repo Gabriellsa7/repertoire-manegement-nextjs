@@ -4,7 +4,7 @@ interface Repertoire {
   id: string;
   name: string;
   description: string;
-  ImageUrl: string;
+  Image_url: string;
 }
 
 export const useFetchRepertoire = () => {

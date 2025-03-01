@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 interface User {
   id: string;
   name: string;
+  image_url: string;
 }
 
 export const useFetchUsers = (): {
