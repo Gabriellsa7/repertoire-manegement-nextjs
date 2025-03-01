@@ -16,6 +16,7 @@ interface Band {
 interface Repertoire {
   id: string;
   name: string;
+  image_url: string;
   band: Band | null;
 }
 
@@ -140,7 +141,7 @@ export default function BandInfo() {
             </div>
             <h2 className="text-2xl font-bold mb-6 text-center">{band.name}</h2>
           </div>
-          <div>Members</div>
+          <div className="text-lg font-bold">Members</div>
           <BandMembers bandId={id} />
           <div>
             <span className="text-lg font-bold">Band Repertoire</span>
@@ -149,15 +150,21 @@ export default function BandInfo() {
             {repertoireBand &&
               repertoireBand.map((repertoire) => (
                 <div
-                  className="flex flex-col gap-2 min-w-[80px]"
+                  className="flex flex-col items-center gap-2 min-w-[80px]"
                   key={repertoire.id}
                   onClick={() =>
                     router.push(`/repertoire-info/${repertoire.id}`)
                   }
                 >
-                  <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3"></div>
+                  <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
+                    {repertoire.image_url && repertoire.image_url ? (
+                      <Image src={repertoire.image_url} alt={repertoire.name} />
+                    ) : (
+                      ""
+                    )}
+                  </div>
                   <div className="w-16">
-                    <h3 className="text-lg font-bold truncate">
+                    <h3 className="text-lg text-center font-bold truncate">
                       {repertoire.name}
                     </h3>
                   </div>
