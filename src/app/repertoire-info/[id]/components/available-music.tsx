@@ -6,6 +6,12 @@ interface Music {
   id: string;
   title: string;
   repertoire: Repertoire;
+  repertoire_music: RepertoireMusic;
+}
+
+interface RepertoireMusic {
+  repertoire_id: string;
+  music_id: string;
 }
 
 interface Repertoire {
@@ -25,19 +31,14 @@ export const AvailableMusicList = () => {
   const url = "http://localhost:8080";
 
   useEffect(() => {
-    fetch(`${url}/music`)
+    fetch(`${url}/music/unassigned`)
       .then((res) => res.json())
       .then((data: Music[]) => {
-        //modify this method to list just musics available
-
-        // const unassignedMusic = data.filter(
-        //   (music) => music.repertoire === null
-        // );
-        // console.log("Unassigned Musics:", unassignedMusic);
-
+        console.log("Unassigned Musics:", data);
         setMusic(data);
-      });
-  });
+      })
+      .catch((error) => console.error("Error fetch music:", error));
+  }, []);
 
   const handleMusicChange = (musicId: string) => {
     setSelectedMusic((prev) =>
