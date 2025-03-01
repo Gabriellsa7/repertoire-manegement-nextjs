@@ -27,7 +27,7 @@ const BandSection = () => {
           ? bands.map((band) => (
               <div
                 key={band.id}
-                className="flex flex-col gap-2 min-w-[80px]"
+                className="flex flex-col gap-2 min-w-[80px] items-center"
                 onClick={() => router.push(`/band-info/${band.id}`)}
               >
                 <div className="flex justify-center items-center w-16 h-16 bg-gray-100 rounded-full">
