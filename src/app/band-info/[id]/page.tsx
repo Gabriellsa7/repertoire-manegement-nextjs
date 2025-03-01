@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { IoArrowBackSharp } from "react-icons/io5";
 import { toast, Toaster } from "react-hot-toast";
+import { BandMembers } from "./components/band-members";
 
 interface Band {
   id: string;
@@ -139,6 +140,8 @@ export default function BandInfo() {
             </div>
             <h2 className="text-2xl font-bold mb-6 text-center">{band.name}</h2>
           </div>
+          <div>Members</div>
+          <BandMembers bandId={id} />
           <div>
             <span className="text-lg font-bold">Band Repertoire</span>
           </div>
