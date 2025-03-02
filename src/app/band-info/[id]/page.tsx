@@ -2,9 +2,10 @@
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { IoArrowBackSharp } from "react-icons/io5";
+import { IoArrowBackSharp, IoTrash } from "react-icons/io5";
 import { toast, Toaster } from "react-hot-toast";
 import { BandMembers } from "./components/band-members";
+import { useDeleteBand } from "@/hooks/useDeleteband";
 
 interface Band {
   id: string;
@@ -34,6 +35,7 @@ export default function BandInfo() {
   const [repertoireBand, setRepertoireBand] = useState<Repertoire[]>([]);
   const [repertoires, setRepertoires] = useState<Repertoire[]>([]);
   const [selectedRepertoires, setSelectedRepertoires] = useState<string[]>([]);
+  const { deleteBand: deleteBandFunction, loading, error } = useDeleteBand();
 
   // Fetch band details
   useEffect(() => {
@@ -116,16 +118,48 @@ export default function BandInfo() {
     );
   };
 
+  const handleDeleteBand = async (id: string) => {
+    try {
+      await deleteBandFunction({ id });
+
+      toast.success("Band deleted successfully", {
+        position: "bottom-right",
+        duration: 1000,
+      });
+      router.push("/home");
+    } catch (error) {
+      toast.error(`Error deleting band ${error}`, {
+        position: "bottom-right",
+        duration: 1000,
+      });
+    }
+  };
+
   if (!band) return <p className="text-center text-white">Loading...</p>;
 
   return (
     <>
       <Toaster />
       <div className="min-h-screen bg-gray-950 text-white m-4">
-        <div className="flex items-center justify-between">
-          <button onClick={handleBackButtonSubmit} className="bg-transparent">
-            <IoArrowBackSharp size={34} color="#009DA2" />
-          </button>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={handleBackButtonSubmit}
+              className="bg-transparent p-0"
+            >
+              <IoArrowBackSharp size={34} color="#009DA2" />
+            </button>
+          </div>
+          <div className="flex items-center justify-between">
+            <button
+              className="bg-transparent p-0"
+              onClick={() => handleDeleteBand(band.id)}
+            >
+              <IoTrash size={32} color="red" />
+            </button>
+            {loading && <p>Deleting...</p>}
+            {error && <p>{error}</p>}
+          </div>
         </div>
         <div className="max-w-md mx-auto flex flex-col gap-6">
           <div className="flex flex-col gap-4 px-16 items-center">
