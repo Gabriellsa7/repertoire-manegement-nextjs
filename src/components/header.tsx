@@ -1,18 +1,21 @@
 "use client";
+import { getLoggedUsers } from "@/app/utils/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdNotificationsNone } from "react-icons/md";
 
 export const Header = () => {
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState("Guest");
+
   const router = useRouter();
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId"); // Retrieves the user ID stored in localStorage
+    const loggedUsers = getLoggedUsers();
 
-    if (userId) {
-      fetch(`http://localhost:8080/user/${userId}`, {
+    if (loggedUsers.length > 0) {
+      const currentUser = loggedUsers[0];
+      fetch(`http://localhost:8080/user/${currentUser.id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -25,14 +28,12 @@ export const Header = () => {
           return response.json();
         })
         .then((data) => {
-          setUserName(data.name); // Update username
+          setUserName(data.name);
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
-          setUserName("Guest"); // Fallback in case of an error
+          setUserName("Guest");
         });
-    } else {
-      setUserName("Guest"); // Fallback if ID not found
     }
   }, []);
 
@@ -51,7 +52,7 @@ export const Header = () => {
           height={32}
         />
         <span className="text-primary-text-color font-bold text-base">
-          {userName || "Loading..."} {/* Show the name or a fallback */}
+          {userName || "Loading..."}
         </span>
       </div>
       <div className="flex items-center gap-3">

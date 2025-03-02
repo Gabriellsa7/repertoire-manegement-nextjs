@@ -48,6 +48,7 @@ const BandSection = () => {
               </div>
             ))
           : ""}
+
         <button
           className="flex bg-transparent items-center min-w-[80px] pb-9"
           onClick={() => setIsModalOpen(true)}
