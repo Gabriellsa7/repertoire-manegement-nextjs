@@ -1,5 +1,4 @@
 "use client";
-import { getLoggedUsers } from "@/app/utils/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,11 +10,11 @@ export const Header = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const loggedUsers = getLoggedUsers();
+    const userId = localStorage.getItem("userId");
+    console.log(localStorage.getItem("userId"));
 
-    if (loggedUsers.length > 0) {
-      const currentUser = loggedUsers[0];
-      fetch(`http://localhost:8080/user/${currentUser.id}`, {
+    if (userId) {
+      fetch(`http://localhost:8080/user/${userId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
