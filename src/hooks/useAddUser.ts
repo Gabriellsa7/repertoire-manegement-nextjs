@@ -13,11 +13,25 @@ export const useAddMember = (bandId: string) => {
     setIsLoading(true);
     setError(null);
 
+    const requesterId =
+      typeof window !== "undefined" ? localStorage.getItem("userId") : null;
+
+    if (!requesterId) {
+      return {
+        success: false,
+        error: "User not authenticated",
+      };
+    }
+
     try {
       const response = await fetch(
         `http://localhost:8080/bands/${bandId}/add-member/${userId}`,
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Requester-Id": requesterId,
+          },
         }
       );
 
