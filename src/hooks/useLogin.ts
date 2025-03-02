@@ -45,7 +45,7 @@ export const useLoginUser = () => {
       }
 
       const data = await response.json();
-      localStorage.setItem(`user_${data.id}`, JSON.stringify(data));
+      localStorage.setItem("userId", data.id);
 
       setIsLoading(false);
       return { success: true, error: null };
