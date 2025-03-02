@@ -5,6 +5,7 @@ interface Band {
   name: string;
   imageUrl: string;
   description?: string;
+  leader_id?: string;
 }
 
 export const useFetchBands = (userId: string | null) => {
@@ -22,7 +23,7 @@ export const useFetchBands = (userId: string | null) => {
     const fetchBands = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/bands/leader/${userId}`,
+          `http://localhost:8080/bands/member/${userId}`,
           {
             method: "GET",
             headers: {
