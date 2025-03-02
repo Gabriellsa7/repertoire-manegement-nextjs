@@ -37,7 +37,30 @@ export const useFetchBands = (userId: string | null) => {
         }
 
         const data = await response.json();
-        setBands(data);
+
+        const leaderResponse = await fetch(
+          `http://localhost:8080/bands/leader/${userId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (!leaderResponse.ok) {
+          throw new Error("Error fetching leader bands");
+        }
+
+        const leaderBands = await leaderResponse.json();
+
+        const allBands = [...data, ...leaderBands];
+        const uniqueBands = allBands.filter(
+          (band, index, self) =>
+            index === self.findIndex((b) => b.id === band.id)
+        );
+
+        setBands(uniqueBands);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setError(err.message || "An unexpected error occurred");
