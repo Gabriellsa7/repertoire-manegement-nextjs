@@ -72,18 +72,22 @@ export const BandMembers = ({ bandId }: Band) => {
           ? users.map((user) => (
               <div
                 key={user.id}
-                className="flex flex-col items-center gap-2 min-w-[80px]"
+                className="flex flex-col items-center gap-2 min-w-[80px] relative"
                 onClick={() => router.push(`/user-info/${user.id}`)}
               >
-                <div className="flex justify-center w-16 h-16 bg-gray-100 rounded-full">
-                  {user.image_url && (
+                <div className="flex items-center text-5xl justify-center w-16 h-16 bg-gray-100 rounded-full">
+                  {/* {user.image_url && (
                     <Image
                       src={user.image_url}
                       alt={user.name}
                       width={70}
                       height={70}
                     />
-                  )}
+                  )} */}
+
+                  <p className="text-black font-bold">
+                    {user.name.charAt(0).toUpperCase()}
+                  </p>
                 </div>
                 <div className="w-20">
                   <p className="text-lg font-bold text-center truncate text-primary-text-color">
