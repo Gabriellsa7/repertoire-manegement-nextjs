@@ -10,6 +10,7 @@ export const useDeleteRepertoire = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  //delete
   const deleteRepertoire = async ({ id }: Repertoire) => {
     try {
       const res = await fetch(`http://localhost:8080/repertoire/${id}`, {
