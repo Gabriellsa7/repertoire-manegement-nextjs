@@ -4,13 +4,13 @@ interface Repertoire {
   id: string;
   name: string;
   description: string;
-  Image_url: string;
+  imageUrl: string;
 }
 
-export const useFetchRepertoire = () => {
+export const useFetchRepertoires = () => {
   const [repertoires, setRepertoires] = useState<Repertoire[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null); // Error handling
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRepertoires = async () => {
@@ -18,42 +18,52 @@ export const useFetchRepertoire = () => {
         setLoading(true);
         setError(null);
 
-        // Get the userId from localStorage
         const userId = localStorage.getItem("userId");
         if (!userId) {
           throw new Error("User not logged in.");
         }
 
-        // Fetch all bands where the user is a leader (or member)
-        const bandsResponse = await fetch(
-          `http://localhost:8080/bands/leader/${userId}`
-          //try make the code bellow work, probably I need change the back
-          //`http://localhost:8080/bands/member/${userId}`
-        );
-        if (!bandsResponse.ok) {
+        const [leaderResponse, memberResponse] = await Promise.all([
+          fetch(`http://localhost:8080/bands/leader/${userId}`),
+          fetch(`http://localhost:8080/bands/member/${userId}`),
+        ]);
+
+        if (!leaderResponse.ok || !memberResponse.ok) {
           throw new Error("Error fetching bands.");
         }
-        const bandsData = await bandsResponse.json();
 
-        // Check if there are any bands
-        if (bandsData.length === 0) {
-          throw new Error("No bands found for this user.");
+        const [leaderBands, memberBands] = await Promise.all([
+          leaderResponse.json(),
+          memberResponse.json(),
+        ]);
+
+        const allBands = [...leaderBands, ...memberBands];
+        const uniqueBands = allBands.filter(
+          (band, index, self) =>
+            index === self.findIndex((b) => b.id === band.id)
+        );
+
+        if (uniqueBands.length === 0) {
+          setRepertoires([]);
+          return;
         }
 
-        // Fetch repertoires for all bands
-        const allRepertoires = [];
-        for (const band of bandsData) {
-          const repertoireResponse = await fetch(
-            `http://localhost:8080/repertoire/band/${band.id}`
-          );
-          if (!repertoireResponse.ok) {
-            throw new Error(
-              `Error fetching repertoires for band with ID ${band.id}.`
-            );
-          }
-          const repertoireData = await repertoireResponse.json();
-          allRepertoires.push(...repertoireData);
+        const repertoireResponses = await Promise.all(
+          uniqueBands.map((band) =>
+            fetch(`http://localhost:8080/repertoire/band/${band.id}`)
+          )
+        );
+
+        const failedResponse = repertoireResponses.find((res) => !res.ok);
+        if (failedResponse) {
+          throw new Error("Error fetching repertoires.");
         }
+
+        const repertoireData = await Promise.all(
+          repertoireResponses.map((res) => res.json())
+        );
+
+        const allRepertoires = repertoireData.flat();
 
         setRepertoires(allRepertoires);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
