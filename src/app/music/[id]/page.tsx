@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import useFileDownload from "@/hooks/usePdfDownload";
 import { useParams, useRouter } from "next/navigation";
+import { MusicHeader } from "./components/music-info-header";
 
 interface Music {
   id: string;
@@ -28,6 +29,7 @@ const MusicDetails = () => {
 
   return (
     <div className="max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-md text-white">
+      <MusicHeader />
       <h2 className="text-xl font-semibold mb-4">{music.title}</h2>
       <p className="text-sm text-gray-400">ID: {music.id}</p>
 
