@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import { ModalSection } from "./components/modal-section";
-import { useFetchRepertoire } from "@/hooks/useFetchRepertoire";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useFetchRepertoires } from "@/hooks/useFetchRepertoire";
 
 const Repertoires = () => {
   const router = useRouter();
-  const { repertoires, error, loading } = useFetchRepertoire();
+  const { repertoires, error, loading } = useFetchRepertoires();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -18,41 +18,35 @@ const Repertoires = () => {
       </div>
 
       <div className="flex gap-3 items-center overflow-x-auto w-full whitespace-nowrap scrollbar-hide">
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p className="text-red-500">{error}</p>
-        ) : repertoires.length > 0 ? (
-          repertoires.map((repertoire) => (
-            <div
-              className="flex flex-col gap-2 min-w-[80px]"
-              key={repertoire.id}
-              onClick={() => router.push(`/repertoire-info/${repertoire.id}`)}
-            >
-              <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
-                {repertoire.ImageUrl && repertoire.ImageUrl ? (
-                  <Image
-                    src={repertoire.ImageUrl}
-                    alt={repertoire.name}
-                    width={32}
-                    height={32}
-                  />
-                ) : (
-                  ""
-                )}
+        {loading && <p>Loading...</p>}
+        {error && <p className="text-red-500">{error}</p>}
+        {!loading && !error && repertoires.length > 0
+          ? repertoires.map((repertoire) => (
+              <div
+                className="flex flex-col gap-2 min-w-[80px] cursor-pointer"
+                key={repertoire.id}
+                onClick={() => router.push(`/repertoire-info/${repertoire.id}`)}
+              >
+                <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
+                  {repertoire.imageUrl ? (
+                    <Image
+                      src={repertoire.imageUrl}
+                      alt={repertoire.name}
+                      width={32}
+                      height={32}
+                    />
+                  ) : (
+                    <span className="text-sm text-gray-500">No Image</span>
+                  )}
+                </div>
+                <div className="w-16">
+                  <h3 className="text-lg font-bold truncate">
+                    {repertoire.name}
+                  </h3>
+                </div>
               </div>
-              <div className="w-16">
-                <h3 className="text-lg font-bold truncate">
-                  {repertoire.name}
-                </h3>
-              </div>
-            </div>
-          ))
-        ) : (
-          ""
-        )}
-
-        {/* Add button */}
+            ))
+          : !loading && !error && <p>No repertoires found.</p>}
         <button
           className="pb-9 min-w-[80px]"
           onClick={() => setIsModalOpen(true)}
