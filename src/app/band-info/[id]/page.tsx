@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { IoArrowBackSharp, IoTrash } from "react-icons/io5";
 import { toast, Toaster } from "react-hot-toast";
 import { BandMembers } from "./components/band-members";
-import { useDeleteBand } from "@/hooks/useDeleteband";
+import { useDeleteBand } from "@/hooks/useDeleteBand";
 
 interface Band {
   id: string;
@@ -184,7 +184,7 @@ export default function BandInfo() {
             {repertoireBand &&
               repertoireBand.map((repertoire) => (
                 <div
-                  className="flex flex-col items-center gap-2 min-w-[80px]"
+                  className="flex flex-col items-center gap-2 min-w-[80px] relative"
                   key={repertoire.id}
                   onClick={() =>
                     router.push(`/repertoire-info/${repertoire.id}`)
