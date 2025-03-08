@@ -30,42 +30,50 @@ export const useFetchMusics = () => {
         const userId = localStorage.getItem("userId");
         if (!userId) throw new Error("User not logged in.");
 
-        // Fetch bands
-        const fetchData = async <T>(
-          url: string,
-          errorMessage: string
-        ): Promise<T> => {
+        const fetchData = async <T>(url: string): Promise<T> => {
           const response = await fetch(url);
-          if (!response.ok) throw new Error(errorMessage);
+          if (!response.ok) throw new Error(`Error fetching from ${url}`);
           return response.json();
         };
 
-        const bands = await fetchData<Band[]>(
-          `http://localhost:8080/bands/leader/${userId}`,
-          "Error fetching bands."
+        const [leaderBands, memberBands] = await Promise.all([
+          fetchData<Band[]>(`http://localhost:8080/bands/leader/${userId}`),
+          fetchData<Band[]>(`http://localhost:8080/bands/member/${userId}`),
+        ]);
+
+        const uniqueBands = [...leaderBands, ...memberBands].filter(
+          (band, index, self) =>
+            index === self.findIndex((b) => b.id === band.id)
         );
 
-        if (bands.length === 0)
-          throw new Error("No bands found for this user.");
+        if (uniqueBands.length === 0) {
+          setMusics([]);
+          return;
+        }
+        const repertoireResponses = await Promise.all(
+          uniqueBands.map((band) =>
+            fetchData<Repertoire[]>(
+              `http://localhost:8080/repertoire/band/${band.id}`
+            )
+          )
+        );
 
-        const allMusics: Music[] = [];
+        const allRepertoires = repertoireResponses.flat();
 
-        // Fetch repertoires and musics for each band
-        for (const band of bands) {
-          const repertoires = await fetchData<Repertoire[]>(
-            `http://localhost:8080/repertoire/band/${band.id}`,
-            `Error fetching repertoires for band ${band.id}.`
-          );
-
-          for (const repertoire of repertoires) {
-            const musics = await fetchData<Music[]>(
-              `http://localhost:8080/repertoire-music/${repertoire.id}/musics`,
-              `Error fetching musics for repertoire ${repertoire.id}.`
-            );
-            allMusics.push(...musics);
-          }
+        if (allRepertoires.length === 0) {
+          setMusics([]);
+          return;
         }
 
+        const musicResponses = await Promise.all(
+          allRepertoires.map((rep) =>
+            fetchData<Music[]>(
+              `http://localhost:8080/repertoire-music/${rep.id}/musics`
+            )
+          )
+        );
+
+        const allMusics = musicResponses.flat();
         setMusics(allMusics);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
