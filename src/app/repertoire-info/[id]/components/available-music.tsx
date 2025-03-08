@@ -1,43 +1,28 @@
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import { useAddMusicToRepertoire } from "@/hooks/useAddMusicToRepertoire";
 
 interface Music {
   id: string;
   title: string;
-  repertoire: Repertoire;
-  repertoire_music: RepertoireMusic;
-}
-
-interface RepertoireMusic {
-  repertoire_id: string;
-  music_id: string;
-}
-
-interface Repertoire {
-  id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  music: Music;
 }
 
 export const AvailableMusicList = () => {
   const params = useParams();
-  const id = params.id as string;
-
+  const idRepertoire = params.id as string;
   const [music, setMusic] = useState<Music[]>([]);
   const [selectedMusic, setSelectedMusic] = useState<string[]>([]);
-  const url = "http://localhost:8080";
+  const { addMusicToRepertoire, isLoading } = useAddMusicToRepertoire();
 
   useEffect(() => {
-    fetch(`${url}/music/unassigned`)
+    fetch("http://localhost:8080/music/unassigned")
       .then((res) => res.json())
       .then((data: Music[]) => {
         console.log("Unassigned Musics:", data);
         setMusic(data);
       })
-      .catch((error) => console.error("Error fetch music:", error));
+      .catch((error) => console.error("Error fetching music:", error));
   }, []);
 
   const handleMusicChange = (musicId: string) => {
@@ -49,29 +34,31 @@ export const AvailableMusicList = () => {
   };
 
   const addMusic = async () => {
-    if (!id || selectedMusic.length === 0) {
-      alert("Please select at least one Music!");
+    if (!idRepertoire || selectedMusic.length === 0) {
+      toast.error("Please select at least one Music!");
       return;
     }
 
-    for (const musicId of selectedMusic) {
-      //add dynamic order
-      await fetch(
-        `http://localhost:8080/repertoire-music/${id}/add-music/${musicId}?order=1`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+    for (const idMusic of selectedMusic) {
+      const result = await addMusicToRepertoire({
+        idRepertoire,
+        idMusic,
+        order: 1,
+      });
 
-      location.reload();
+      if (!result.success) {
+        toast.error(result.error || "Failed to add music.");
+        return;
+      }
     }
 
-    toast.success("music added successfully", {
+    toast.success("Music added successfully!", {
       position: "bottom-right",
       duration: 1000,
     });
+    setSelectedMusic([]);
   };
+
   return (
     <>
       <Toaster />
@@ -103,8 +90,9 @@ export const AvailableMusicList = () => {
           <button
             onClick={addMusic}
             className="w-full p-2 bg-teal-600 rounded hover:bg-teal-700 text-white"
+            disabled={isLoading}
           >
-            Add Music
+            {isLoading ? "Adding..." : "Add Music"}
           </button>
         )}
       </div>
