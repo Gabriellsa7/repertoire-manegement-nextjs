@@ -21,8 +21,11 @@ export const UseAddRepertoireToBand = () => {
 
       const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idRepertoire }),
+        headers: {
+          "Content-Type": "application/json",
+          "Requester-Id": userId, // Pass the userId as the Requester-Id
+        },
+        body: JSON.stringify({ idRepertoire }), // Body can stay as is since backend does not seem to need it
       });
 
       if (!response.ok) throw new Error("Failed to add repertoire to band.");

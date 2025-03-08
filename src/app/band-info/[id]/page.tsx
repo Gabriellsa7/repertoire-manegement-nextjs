@@ -6,6 +6,7 @@ import { IoArrowBackSharp, IoTrash } from "react-icons/io5";
 import { toast, Toaster } from "react-hot-toast";
 import { BandMembers } from "./components/band-members";
 import { useDeleteBand } from "@/hooks/useDeleteBand";
+import { UseAddRepertoireToBand } from "@/hooks/useAddRepertoireToBand"; // Importe o hook que você criou
 
 interface Band {
   id: string;
@@ -26,6 +27,7 @@ export default function BandInfo() {
   const id = params.id as string;
 
   const router = useRouter();
+  const { addRepertoireToBand } = UseAddRepertoireToBand();
 
   const handleBackButtonSubmit = () => {
     router.push("/home");
@@ -35,7 +37,11 @@ export default function BandInfo() {
   const [repertoireBand, setRepertoireBand] = useState<Repertoire[]>([]);
   const [repertoires, setRepertoires] = useState<Repertoire[]>([]);
   const [selectedRepertoires, setSelectedRepertoires] = useState<string[]>([]);
-  const { deleteBand: deleteBandFunction, loading, error } = useDeleteBand();
+  const {
+    deleteBand: deleteBandFunction,
+    loading,
+    error: deleteError,
+  } = useDeleteBand();
 
   // Fetch band details
   useEffect(() => {
@@ -66,7 +72,8 @@ export default function BandInfo() {
       })
       .catch((err) => console.error("Error fetching repertoires:", err));
   }, []);
-  //Fetch Repertoire By Band ID
+
+  // Fetch Repertoire By Band ID
   useEffect(() => {
     if (band?.id) {
       fetch(`http://localhost:8080/repertoire/band/${band.id}`)
@@ -92,21 +99,28 @@ export default function BandInfo() {
     }
 
     for (const repId of selectedRepertoires) {
-      await fetch(
-        `http://localhost:8080/repertoire/${repId}/assign-band/${id}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const result = await addRepertoireToBand({
+        idBand: id,
+        idRepertoire: repId,
+      });
 
-      location.reload();
+      if (result.success) {
+        toast.success("Repertoire added successfully!", {
+          position: "bottom-right",
+          duration: 1000,
+        });
+      } else {
+        toast.error(result.error || "Failed to add repertoire.", {
+          position: "bottom-right",
+          duration: 1000,
+        });
+      }
     }
 
-    toast.success("repertoire added successfully", {
-      position: "bottom-right",
-      duration: 1000,
-    });
+    // Refresh repertoires after adding them
+    fetch(`http://localhost:8080/repertoire/band/${id}`)
+      .then((res) => res.json())
+      .then((data: Repertoire[]) => setRepertoireBand(data));
   };
 
   // Handle repertoire selection
@@ -158,7 +172,7 @@ export default function BandInfo() {
               <IoTrash size={32} color="red" />
             </button>
             {loading && <p>Deleting...</p>}
-            {error && <p>{error}</p>}
+            {deleteError && <p>{deleteError}</p>}
           </div>
         </div>
         <div className="max-w-md mx-auto flex flex-col gap-6">
@@ -204,19 +218,6 @@ export default function BandInfo() {
                   </div>
                 </div>
               ))}
-
-            {/* Add button
-                <button
-                  className="pb-9 min-w-[80px]"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <Image
-                    src="/assets/plus2.png"
-                    alt="plus icon"
-                    width={32}
-                    height={32}
-                  />
-                </button> */}
           </div>
 
           <div className="space-y-6">
