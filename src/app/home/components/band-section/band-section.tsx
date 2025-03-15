@@ -30,13 +30,13 @@ const BandSection = () => {
                 className="flex flex-col gap-2 min-w-[80px] items-center"
                 onClick={() => router.push(`/band-info/${band.id}`)}
               >
-                <div className="flex justify-center items-center w-16 h-16 bg-gray-100 rounded-full">
+                <div className="relative flex justify-center items-center w-16 h-16 bg-gray-100 rounded-full">
                   {band.imageUrl && (
                     <Image
                       src={band.imageUrl}
                       alt={band.name}
-                      width={70}
-                      height={70}
+                      fill
+                      className="object-cover rounded-xl"
                     />
                   )}
                 </div>
