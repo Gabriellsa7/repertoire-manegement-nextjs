@@ -26,7 +26,14 @@ export const MusicList = () => {
             key={music.id}
             onClick={() => router.push(`/music/${music.id}`)}
           >
-            <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3"></div>
+            <div className="relative flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden">
+              <Image
+                src={music.imageUrl}
+                alt={music.title}
+                fill
+                className="object-cover rounded-xl"
+              />
+            </div>
             <div className="w-16">
               <h3 className="text-lg font-bold truncate">{music.title}</h3>
             </div>
