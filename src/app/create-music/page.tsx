@@ -7,6 +7,7 @@ import { Toaster, toast } from "react-hot-toast";
 
 const CreateMusic = () => {
   const [title, setTitle] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const { files, uploadFile, setFiles } = useFileUpload();
   const [musicId, setMusicId] = useState<string | null>(null);
   const router = useRouter();
@@ -16,7 +17,7 @@ const CreateMusic = () => {
       const response = await fetch("http://localhost:8080/music", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title }),
+        body: JSON.stringify({ title, imageUrl }),
       });
 
       if (!response.ok) throw new Error("Error Creating music");
@@ -73,6 +74,18 @@ const CreateMusic = () => {
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">
+                Music Image
+              </label>
+              <input
+                type="text"
+                placeholder="Enter Music Title"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                className="w-full p-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">
                 File Upload
               </label>
               <label
@@ -99,7 +112,6 @@ const CreateMusic = () => {
                   >
                     <div className="flex-1">
                       <div className="flex items-center space-x-2">
-                        <span className="text-gray-400">PDF</span>{" "}
                         <p className="text-sm font-medium text-white">
                           {file.file.name}
                         </p>
@@ -110,7 +122,7 @@ const CreateMusic = () => {
                       <progress
                         value={file.progress}
                         max="100"
-                        className="w-full h-2 bg-gray-700 rounded"
+                        className="w-full h-2 bg-gray-700 rounded-full"
                       ></progress>
                       {file.status === "failed" && (
                         <p className="text-red-500 text-xs mt-1">
@@ -123,7 +135,7 @@ const CreateMusic = () => {
                         </p>
                       )}
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex items-center space-x-2">
                       {file.status === "failed" && (
                         <button
                           onClick={() => uploadFile(file.musicId, file.file)}
@@ -151,7 +163,7 @@ const CreateMusic = () => {
                             prev.filter((f) => f.id !== file.id)
                           )
                         }
-                        className="text-gray-400 hover:text-white"
+                        className="text-gray-400 hover:text-white flex items-center"
                       >
                         <svg
                           className="w-4 h-4"
