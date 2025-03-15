@@ -78,13 +78,13 @@ export const MusicHeader = () => {
       </div>
 
       <div className="flex flex-col gap-4 px-16 items-center">
-        <div className="w-24 h-24 border-white border-2 text-white rounded-full flex items-center justify-center text-5xl">
+        <div className="relative w-24 h-24 border-white border-2 text-white flex items-center justify-center text-5xl">
           {music && music.imageUrl ? (
             <Image
               src={music.imageUrl}
               alt={music.title}
-              width={102}
-              height={102}
+              fill
+              className="object-cover"
             />
           ) : (
             ""
