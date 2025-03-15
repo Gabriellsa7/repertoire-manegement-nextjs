@@ -1,5 +1,4 @@
 "use client";
-
 import { getLoggedUsers } from "@/app/utils/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -20,7 +19,7 @@ interface Band {
 interface User {
   id: string;
   name: string;
-  image_url: string;
+  imageUrl: string;
 }
 
 export const BandMembers = ({ bandId }: Band) => {
@@ -75,19 +74,19 @@ export const BandMembers = ({ bandId }: Band) => {
                 className="flex flex-col items-center gap-2 min-w-[80px] relative"
                 onClick={() => router.push(`/user-info/${user.id}`)}
               >
-                <div className="flex items-center text-5xl justify-center w-16 h-16 bg-gray-100 rounded-full">
-                  {/* {user.image_url && (
+                <div className="relative flex items-center text-5xl justify-center w-16 h-16 bg-gray-100 rounded-full">
+                  {user.imageUrl ? (
                     <Image
-                      src={user.image_url}
+                      src={user.imageUrl}
                       alt={user.name}
-                      width={70}
-                      height={70}
+                      fill
+                      className="object-cover rounded-full"
                     />
-                  )} */}
-
-                  <p className="text-black font-bold">
-                    {user.name.charAt(0).toUpperCase()}
-                  </p>
+                  ) : (
+                    <p className="text-black font-bold">
+                      {user.name.charAt(0).toUpperCase()}
+                    </p>
+                  )}
                 </div>
                 <div className="w-20">
                   <p className="text-lg font-bold text-center truncate text-primary-text-color">

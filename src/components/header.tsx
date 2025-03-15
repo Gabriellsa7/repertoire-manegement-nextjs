@@ -6,6 +6,7 @@ import { MdNotificationsNone } from "react-icons/md";
 
 export const Header = () => {
   const [userName, setUserName] = useState("Guest");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const router = useRouter();
 
@@ -28,6 +29,7 @@ export const Header = () => {
         })
         .then((data) => {
           setUserName(data.name);
+          setImageUrl(data.imageUrl);
         })
         .catch((error) => {
           console.error("Error fetching user data:", error);
@@ -59,8 +61,17 @@ export const Header = () => {
           <MdNotificationsNone size={32} color="#009DA2" />
         </button>
         <button onClick={handleProfileButtonSubmit} className="bg-transparent">
-          <div className="w-11 h-11 bg-[#009DA2] text-white rounded-full flex items-center justify-center text-xl">
-            {userName.charAt(0).toUpperCase()}
+          <div className="relative w-11 h-11 bg-[#009DA2] text-white rounded-full flex items-center justify-center text-xl">
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt={userName}
+                fill
+                className="object-cover rounded-full"
+              />
+            ) : (
+              <span>{userName.charAt(0).toUpperCase()}</span> // Show the first letter if image URL is not available
+            )}
           </div>
         </button>
       </div>
