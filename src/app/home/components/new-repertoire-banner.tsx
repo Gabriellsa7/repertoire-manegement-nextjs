@@ -46,28 +46,27 @@ const RepertoireBanner = () => {
       <div>
         <span className="font-bold">New Repertoire</span>
       </div>
-      <div className="h-36 bg-white rounded-xl p-3">
+      <div className="relative h-36 bg-white rounded-xl overflow-hidden">
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>{error}</p>
         ) : latestRepertoire ? (
-          <>
-            {latestRepertoire.imageUrl ? (
+          latestRepertoire.imageUrl ? (
+            <div className="relative w-full h-full">
               <Image
                 src={latestRepertoire.imageUrl}
-                alt="logo"
-                width={100}
-                height={100}
-                priority
+                alt="Repertoire Image"
+                fill
+                className="object-cover rounded-xl"
               />
-            ) : (
-              <div className="flex flex-col items-center">
-                <p className="text-black">{latestRepertoire.name}</p>
-                <p className="text-black">{latestRepertoire.description}</p>
-              </div>
-            )}
-          </>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <p className="text-black">{latestRepertoire.name}</p>
+              <p className="text-black">{latestRepertoire.description}</p>
+            </div>
+          )
         ) : (
           <p>No Repertoires</p>
         )}
