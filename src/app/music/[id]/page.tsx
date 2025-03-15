@@ -28,10 +28,8 @@ const MusicDetails = () => {
   if (!music) return <p className="text-center text-white">Loading...</p>;
 
   return (
-    <div className="max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-md text-white">
+    <div className="max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-md text-white mt-4">
       <MusicHeader />
-      <h2 className="text-xl font-semibold mb-4">{music.title}</h2>
-      <p className="text-sm text-gray-400">ID: {music.id}</p>
 
       <div className="mt-4 flex space-x-2">
         <button
