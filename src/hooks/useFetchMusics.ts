@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 interface Music {
   id: string;
   title: string;
+  imageUrl: string;
 }
 
 interface Repertoire {
