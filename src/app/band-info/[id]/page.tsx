@@ -6,7 +6,7 @@ import { IoArrowBackSharp, IoTrash } from "react-icons/io5";
 import { toast, Toaster } from "react-hot-toast";
 import { BandMembers } from "./components/band-members";
 import { useDeleteBand } from "@/hooks/useDeleteBand";
-import { UseAddRepertoireToBand } from "@/hooks/useAddRepertoireToBand"; // Importe o hook que você criou
+import { UseAddRepertoireToBand } from "@/hooks/useAddRepertoireToBand";
 
 interface Band {
   id: string;
@@ -18,7 +18,7 @@ interface Band {
 interface Repertoire {
   id: string;
   name: string;
-  image_url: string;
+  imageUrl: string;
   band: Band | null;
 }
 
@@ -121,6 +121,8 @@ export default function BandInfo() {
     fetch(`http://localhost:8080/repertoire/band/${id}`)
       .then((res) => res.json())
       .then((data: Repertoire[]) => setRepertoireBand(data));
+
+    window.location.reload();
   };
 
   // Handle repertoire selection
@@ -177,13 +179,13 @@ export default function BandInfo() {
         </div>
         <div className="max-w-md mx-auto flex flex-col gap-6">
           <div className="flex flex-col gap-4 px-16 items-center">
-            <div className="w-24 h-24 border-white border-2 text-white rounded-full flex items-center justify-center text-5xl">
+            <div className="relative w-24 h-24 border-white border-2 text-white rounded-full flex items-center justify-center text-5xl">
               {band.imageUrl && (
                 <Image
                   src={band.imageUrl}
                   alt={band.name}
-                  width={102}
-                  height={102}
+                  fill
+                  className="object-cover rounded-xl"
                 />
               )}
             </div>
@@ -204,9 +206,14 @@ export default function BandInfo() {
                     router.push(`/repertoire-info/${repertoire.id}`)
                   }
                 >
-                  <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
-                    {repertoire.image_url && repertoire.image_url ? (
-                      <Image src={repertoire.image_url} alt={repertoire.name} />
+                  <div className="relative flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
+                    {repertoire.imageUrl && repertoire.imageUrl ? (
+                      <Image
+                        src={repertoire.imageUrl}
+                        alt={repertoire.name}
+                        fill
+                        className="object-cover rounded-xl"
+                      />
                     ) : (
                       ""
                     )}
