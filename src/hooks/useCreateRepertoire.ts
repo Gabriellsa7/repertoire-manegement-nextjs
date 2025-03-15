@@ -2,7 +2,7 @@ import { useState } from "react";
 
 interface Repertoire {
   name: string;
-  image_url?: string;
+  imageUrl?: string;
   description: string;
 }
 
@@ -20,7 +20,7 @@ export const useCreateRepertoire = (): UseCreateRepertoireResponse => {
 
   const createRepertoire = async ({
     name,
-    image_url,
+    imageUrl,
     description,
   }: Repertoire) => {
     const userId = localStorage.getItem("userId");
@@ -36,7 +36,7 @@ export const useCreateRepertoire = (): UseCreateRepertoireResponse => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
-          image_url,
+          imageUrl,
           description,
         }),
       });
