@@ -27,13 +27,13 @@ const Repertoires = () => {
                 key={repertoire.id}
                 onClick={() => router.push(`/repertoire-info/${repertoire.id}`)}
               >
-                <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
+                <div className="relative flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
                   {repertoire.imageUrl ? (
                     <Image
                       src={repertoire.imageUrl}
                       alt={repertoire.name}
-                      width={32}
-                      height={32}
+                      fill
+                      className="object-cover rounded-xl"
                     />
                   ) : (
                     <span className="text-sm text-gray-500">No Image</span>
