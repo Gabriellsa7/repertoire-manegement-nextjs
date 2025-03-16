@@ -1,5 +1,5 @@
 "use client";
-import { getLoggedUsers } from "@/app/utils/auth";
+import { getAllUsers } from "@/app/utils/auth";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -29,34 +29,35 @@ export const BandMembers = ({ bandId }: Band) => {
   const [isLeader, setIsLeader] = useState<boolean>(false);
 
   useEffect(() => {
-    const loggedUsers = getLoggedUsers();
-    if (!loggedUsers.length) return;
+    const allUsers = getAllUsers();
+    if (!allUsers.length) return;
 
-    const currentUser = loggedUsers[0];
+    const currentUser = allUsers[0];
 
     if (bandId) {
       console.log("Fetching band details for bandId:", bandId);
+
       fetch(`http://localhost:8080/bands/${bandId}`)
         .then((res) => res.json())
         .then((bandData) => {
           console.log("Band data:", bandData);
 
-          if (bandData.leader.id === currentUser.id) {
+          if (bandData.leader && bandData.leader.id === currentUser.id) {
             setIsLeader(true);
           } else {
             setIsLeader(false);
           }
+
+          fetch(`http://localhost:8080/user/${bandId}/members`)
+            .then((res) => res.json())
+            .then((data) => {
+              console.log("Band members:", data);
+              setUsers(data);
+              setLoading(false);
+            })
+            .catch((err) => console.error("Error fetching members:", err));
         })
         .catch((err) => console.error("Error fetching band details:", err));
-
-      fetch(`http://localhost:8080/user/${bandId}/members`)
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("Band members:", data);
-          setUsers(data);
-          setLoading(false);
-        })
-        .catch((err) => console.error("Error fetching members:", err));
     }
   }, [bandId]);
 
@@ -96,6 +97,7 @@ export const BandMembers = ({ bandId }: Band) => {
               </div>
             ))
           : ""}
+
         {isLeader && (
           <button
             className="flex bg-transparent items-center min-w-[80px] pb-9"
