@@ -1,9 +1,11 @@
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface Music {
   id: string;
   title: string;
+  imageUrl: string;
   repertoire: Repertoire;
 }
 
@@ -33,7 +35,7 @@ export const RepertoireMusicList = () => {
   });
 
   return (
-    <div>
+    <div className="flex flex-col gap-4">
       <span className="text-lg font-bold">Repertoire Music</span>
       <div className="flex gap-3 items-center overflow-x-auto w-full whitespace-nowrap scrollbar-hide">
         {repertoireMusic &&
@@ -43,25 +45,19 @@ export const RepertoireMusicList = () => {
               key={music.id}
               onClick={() => router.push(`/music/${music.id}`)}
             >
-              <div className="flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3"></div>
+              <div className="relative flex flex-col justify-center items-center w-16 h-16 bg-gray-100 rounded-xl overflow-hidden p-3">
+                <Image
+                  src={music.imageUrl}
+                  alt={music.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
               <div className="w-16">
                 <h3 className="text-lg font-bold truncate">{music.title}</h3>
               </div>
             </div>
           ))}
-
-        {/* Add button
-                <button
-                  className="pb-9 min-w-[80px]"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <Image
-                    src="/assets/plus2.png"
-                    alt="plus icon"
-                    width={32}
-                    height={32}
-                  />
-                </button> */}
       </div>
     </div>
   );
