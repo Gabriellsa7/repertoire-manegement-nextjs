@@ -36,7 +36,7 @@ const BandSection = () => {
                       src={band.imageUrl}
                       alt={band.name}
                       fill
-                      className="object-cover rounded-xl"
+                      className="object-cover rounded-full"
                     />
                   )}
                 </div>

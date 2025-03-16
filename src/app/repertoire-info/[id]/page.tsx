@@ -5,7 +5,7 @@ import { RepertoireMusicList } from "./components/repertoire-music-list";
 
 export const RepertoireInfo = () => {
   return (
-    <div className="min-h-screen bg-gray-950 text-white m-4">
+    <div className="min-h-screen bg-gray-950 text-white p-4">
       <RepertoireHeader />
       <div className="max-w-md mx-auto flex flex-col gap-6">
         <RepertoireMusicList />
