@@ -81,7 +81,7 @@ export const RepertoireHeader = () => {
       </div>
 
       <div className="flex flex-col gap-4 px-16 items-center">
-        <div className="w-24 h-24 border-white border-2 text-white rounded-full flex items-center justify-center text-5xl">
+        <div className="w-24 h-24 border-white border-2 text-white flex items-center justify-center text-5xl">
           {repertoire && repertoire ? (
             <Image
               src={repertoire.imageUrl}
