@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import useFileDownload from "@/hooks/usePdfDownload";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { MusicHeader } from "./components/music-info-header";
 
 interface Music {
@@ -10,7 +10,6 @@ interface Music {
 }
 
 const MusicDetails = () => {
-  const router = useRouter();
   const params = useParams();
   const id = params.id as string;
   const { downloadFile } = useFileDownload();
@@ -28,7 +27,7 @@ const MusicDetails = () => {
   if (!music) return <p className="text-center text-white">Loading...</p>;
 
   return (
-    <div className="max-w-md mx-auto bg-gray-900 p-6 rounded-lg shadow-md text-white mt-4">
+    <div className="p-6 bg-gray-900 shadow-md text-white">
       <MusicHeader />
 
       <div className="mt-4 flex space-x-2">
@@ -46,12 +45,6 @@ const MusicDetails = () => {
           🌐 Open PDF
         </button>
       </div>
-      <button
-        onClick={() => router.push("/home")}
-        className="mt-4 w-full bg-gray-700 hover:bg-gray-800 p-2 rounded"
-      >
-        ⬅️ Back
-      </button>
     </div>
   );
 };
