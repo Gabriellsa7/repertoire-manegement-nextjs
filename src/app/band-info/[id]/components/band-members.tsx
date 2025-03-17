@@ -10,8 +10,6 @@ interface Band {
   imageUrl?: string;
   leader?: {
     id: string;
-    name: string;
-    email: string;
   };
   bandId: string;
 }
@@ -30,9 +28,14 @@ export const BandMembers = ({ bandId }: Band) => {
 
   useEffect(() => {
     const allUsers = getAllUsers();
-    if (!allUsers.length) return;
 
-    const currentUser = allUsers[0];
+    const currentUser = allUsers.find(
+      (user) => user.id === localStorage.getItem("userId")
+    );
+
+    if (!currentUser) {
+      return;
+    }
 
     if (bandId) {
       console.log("Fetching band details for bandId:", bandId);
@@ -41,8 +44,7 @@ export const BandMembers = ({ bandId }: Band) => {
         .then((res) => res.json())
         .then((bandData) => {
           console.log("Band data:", bandData);
-
-          if (bandData.leader && bandData.leader.id === currentUser.id) {
+          if (bandData.leader.id === currentUser.id) {
             setIsLeader(true);
           } else {
             setIsLeader(false);
@@ -98,7 +100,7 @@ export const BandMembers = ({ bandId }: Band) => {
             ))
           : ""}
 
-        {isLeader && (
+        {isLeader ? (
           <button
             className="flex bg-transparent items-center min-w-[80px] pb-9"
             onClick={() => router.push(`/add-user/${bandId}`)}
@@ -110,6 +112,8 @@ export const BandMembers = ({ bandId }: Band) => {
               height={32}
             />
           </button>
+        ) : (
+          ""
         )}
       </div>
     </div>
