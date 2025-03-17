@@ -27,40 +27,54 @@ export const BandMembers = ({ bandId }: Band) => {
   const [isLeader, setIsLeader] = useState<boolean>(false);
 
   useEffect(() => {
-    const allUsers = getAllUsers();
+    const fetchData = async () => {
+      try {
+        const allUsers = await getAllUsers();
+        console.log("All users:", allUsers);
 
-    const currentUser = allUsers.find(
-      (user) => user.id === localStorage.getItem("userId")
-    );
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+          console.error("No logged in users found!");
+          return;
+        }
 
-    if (!currentUser) {
-      return;
-    }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const currentUser = allUsers.find((user: any) => user.id === userId);
+        if (!currentUser) {
+          console.error("Logged in user not found in user list!");
+          return;
+        }
 
-    if (bandId) {
-      console.log("Fetching band details for bandId:", bandId);
+        if (bandId) {
+          console.log("Fetching band details for bandId:", bandId);
 
-      fetch(`http://localhost:8080/bands/${bandId}`)
-        .then((res) => res.json())
-        .then((bandData) => {
+          const bandResponse = await fetch(
+            `http://localhost:8080/bands/${bandId}`
+          );
+          const bandData = await bandResponse.json();
           console.log("Band data:", bandData);
+
           if (bandData.leader.id === currentUser.id) {
             setIsLeader(true);
           } else {
             setIsLeader(false);
           }
 
-          fetch(`http://localhost:8080/user/${bandId}/members`)
-            .then((res) => res.json())
-            .then((data) => {
-              console.log("Band members:", data);
-              setUsers(data);
-              setLoading(false);
-            })
-            .catch((err) => console.error("Error fetching members:", err));
-        })
-        .catch((err) => console.error("Error fetching band details:", err));
-    }
+          const membersResponse = await fetch(
+            `http://localhost:8080/user/${bandId}/members`
+          );
+          const membersData = await membersResponse.json();
+          console.log("Band members:", membersData);
+
+          setUsers(membersData);
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar os dados:", err);
+      }
+    };
+
+    fetchData();
   }, [bandId]);
 
   if (loading) {
