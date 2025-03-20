@@ -178,7 +178,7 @@ export default function BandInfo() {
           </div>
         </div>
         <div className="max-w-md mx-auto flex flex-col gap-6">
-          <div className="flex flex-col gap-4 px-16 items-center">
+          <div className="flex flex-col gap-4 p-16 items-center">
             <div className="relative w-24 h-24 border-white border-2 text-white flex items-center justify-center text-5xl">
               {band.imageUrl && (
                 <Image
